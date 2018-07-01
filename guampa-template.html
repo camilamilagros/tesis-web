@@ -1,0 +1,54 @@
+
+<!doctype html>
+<html lang="en" ng-app="guampa">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Proyecto de Tesis</title>
+
+	<!-- css files -->
+	<link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link href="css/style.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+	<div ng-controller="MenuCtrl">
+		<div class="navbar navbar-fixed-top">
+  			<div class="navbar-inner">
+    			<ul class="nav">
+    				<li ng-repeat="menu in menuList" class="{{menu.style}}">
+                    <a href="{{menu.url}}" ng-click="changeActive(menu.id)"
+                       ng-bind-template="{{menu.text}}" translate></a>
+    				</li>
+                    <li ng-if="currentUser.username">
+                      <a>logged in as {{currentUser.username}}</a>
+                    </li>
+                    <li ng-if="currentUser.username">
+                      <a href="#/logout"><em>log out</em></a>
+                    </li>
+                    <li ng-if="!currentUser.username">
+                      <a href="#/login"><em>log in</em></a>
+                    </li>
+    			</ul>
+  			</div>
+		</div>
+	</div>
+
+	<div class="main" ng-view></div>
+
+    <!-- js files -->
+    <script src="//login.persona.org/include.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.1.5/angular.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.1.5/angular-resource.js"></script>
+    <script src="lib/angular-translate.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script src="lib/jquery.form.min.js"></script>
+    <script src="lib/bootstrap-dropdown.js"></script>
+    <script src="js/translations.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/services.js"></script>
+    <script src="js/controllers.js"></script>
+    <script src="js/filters.js"></script>
+    <script src="js/directives.js"></script>
+</body>
+</html>

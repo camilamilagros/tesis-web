@@ -9,7 +9,8 @@ class SentenceController extends Controller
 {
     function index()
     {
-    	dd(Sentence::all());
+    	$data = [];
+    	return view('index',$data);
     }
 
     function toTranslate()

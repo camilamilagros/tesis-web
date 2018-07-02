@@ -18,3 +18,4 @@ Route::get('/', function () {
 
 Route::get('/sentences', 'SentenceController@index');
 Route::get('/sentences/translate', 'SentenceController@toTranslate');
+Route::post('/sentences/translate', 'SentenceController@translate');

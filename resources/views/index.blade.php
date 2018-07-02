@@ -3,42 +3,48 @@
 @section('content')
     <div class="row">
     	<div class="col-sm-12">
-	    	<form >
+	    	<form method="post" action="{{ url('/sentences/translate') }}">
+	    		{{ csrf_field() }}
 	    		<fieldset>
 		    		<legend>Documento:</legend>
 		    		<div class="form-group">
-			            <label for="exampleInputFile"><i class="fas fa-link" style="color: #a9a9a9"></i>
-
- BLEU</label>
+			            <label for="exampleInputFile">
+			            	<i class="fas fa-link" style="color: #a9a9a9"></i>
+			            	{{ $document->title }}
+			            </label>
 		          	</div>
 	    		</fieldset>
 	    		<fieldset>
 	    			<legend>Contexto:</legend>
 					<div class="form-group">
-			        	<label for="exampleInputFile">Esto permite una mayor robustez a la medida</label>
-			        	<label for="exampleInputFile">Esto permite una mayor robustez a la medida</label>
-			        	<label for="exampleInputFile">Esto permite una mayor robustez a la medida</label>
-			        	<label style="background-color: #f9f4b8" for="exampleInputFile">Esto permite una mayor robustez a la medida</label>
-			        	<label for="exampleInputFile">Esto permite una mayor robustez a la medida</label>
-			        	<label for="exampleInputFile">Esto permite una mayor robustez a la medida</label>
-			        	<label for="exampleInputFile">Esto permite una mayor robustez a la medida</label>
+			        	<label style="text-align: justify;" for="exampleInputFile">
+			        	@foreach ($before as $sentence)
+						    {{ $sentence->text }}
+						@endforeach
+			        	<span style="background-color: #f9f4b8" for="exampleInputFile">
+			        		{{ $selected->text }}
+			        	</span>
+			        	@foreach ($after as $sentence)
+						    {{ $sentence->text }}
+						@endforeach
+						</label>
 			        </div>
 	    		</fieldset>
 	    		<fieldset>
 		    		<legend>Oración a traducir:</legend>
 		    		<div class="form-group">
-			            <label for="exampleInputFile">"Esto permite una mayor robustez a la medida"</label>
+			            <label for="exampleInputFile">{{ '"' . $selected->text . '"' }}</label>
 		          	</div>
 	    		</fieldset>
 	    		<fieldset>
 		    		<legend>Ingresar traducción:</legend>
 		    		<div class="form-group">
-			            <input type="text" class="form-control" placeholder="Default input" id="inputDefault">
+			            <input type="text" class="form-control" placeholder="" id="inputDefault" name="translation">
+			            <input type="hidden" value="{{ $selected->id }}" name="id">
 		          	</div>
 	    		</fieldset>
 	    		<div class="modal-footer" style="border-top: 0;">
-                  <button type="button" class="btn btn-primary">Otra oracion</button>
-                  <button type="button" class="btn btn-secondary">Guardar</button>
+                  <button type="submit" class="btn btn-primary">Guardar</button>
                 </div>
 	    	</form>
     	</div>

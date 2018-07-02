@@ -7,22 +7,53 @@ Script to test sentence meta data anotation
 import argparse
 import os
 
-import model
-import sqlalchemy
 import csv
-import fasttext
 
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
+from sqlalchemy import Column, Integer, String, Float
+from sqlalchemy import Table
 
-from model import Sentence
 from functools import reduce
 import re
 
 import spacy
 
 nlp = spacy.load('es')
+
+engine = create_engine("sqlite:///database.db")
+Session = sessionmaker(bind=engine)
+Base = declarative_base()
+Base.metadata.create_all(engine)
+session = Session()
+
+class Sentence(Base):
+    __tablename__ = 'sentences'
+
+    id = Column(Integer, primary_key=True)
+    text = Column(String)
+    translation = Column(String)
+    score = Column(Float)
+
+    # meta data
+    _oovw = Column(Integer)
+    _words = Column(Integer)
+    _repetitions = Column(Integer)
+
+    _POS_adj   = Column(Integer)
+    _POS_adv   = Column(Integer)
+    _POS_noun  = Column(Integer)
+    _POS_propn = Column(Integer)
+    _POS_verb  = Column(Integer)
+    _POS_intj  = Column(Integer) # interjection: an exclamation or part of an exclamation
+
+    def __init__(self, text, docid):
+        self.text  = text
+        self.docid = docid
+
+    def __repr__(self):
+       return ("<Sentence(%d, '%s', '%s', <Meta('oovw': %d, 'rep': %d, 'adj': %d, 'noun': %d, 'verb': %d))>" % (self.id, self.text, self.translation, self._oovw, self._repetitions, self._POS_adj, self._POS_noun, self._POS_verb))
 
 # calculates number of oovw in sentence
 def calculate_oovw(sentence, corpus_es):
@@ -38,7 +69,7 @@ def calculate_oovw(sentence, corpus_es):
 
 	sentence._oovw = score
 	sentence._words = len(sentence.text.split())
-	sentence._repetitions = repetitions/sentence._words
+	sentence._repetitions = repetitions
 
 	return sentence
 
@@ -55,15 +86,8 @@ def calculate_pos(sentence, corpus_es):
 	return sentence
 
 def main():
-	engine = create_engine("sqlite:///guampa.db")
-	Session = sessionmaker(bind=engine)
-	Base = model.Base
-	Base.metadata.create_all(engine)
-	session = Session()
-
-	sentences = session.query(Sentence).take(5).all()
+	sentences = session.query(Sentence).filter(Sentence._words == None).all()
 	corpus_es = []
-	print('Loop c:')
 
 	for sentence in sentences:
 		sentence = calculate_oovw(sentence, corpus_es)

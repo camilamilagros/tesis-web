@@ -12,3 +12,4 @@ yarn-error.log
 .env
 
 database.db
+embedding.bin

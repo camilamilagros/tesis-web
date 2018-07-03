@@ -15,7 +15,12 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/translation', 'TranslationController@create');
+Route::post('/translation', 'TranslationController@store');
 
-Route::get('/sentences', 'SentenceController@index');
-Route::get('/sentences/translate', 'SentenceController@toTranslate');
-Route::post('/sentences/translate', 'SentenceController@translate');
+Route::get('/document', 'DocumentController@index');
+Route::get('/document/{document}', 'DocumentController@show');
+
+Route::get('/sentence/{sentence}/translation', 'SentenceController@createTranslation');
+Route::post('/sentence/{sentence}/translation', 'SentenceController@storeTranslation');
+

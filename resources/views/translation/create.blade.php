@@ -3,13 +3,15 @@
 @section('content')
     <div class="row">
     	<div class="col-sm-12">
-	    	<form method="post" action="{{ url('/sentences/translate') }}">
+	    	<form method="post" action="{{ url('translation') }}">
 	    		{{ csrf_field() }}
 	    		<fieldset>
 		    		<legend>Documento:</legend>
 		    		<div class="form-group">
 			            <label for="exampleInputFile">
-			            	<i class="fas fa-link" style="color: #a9a9a9"></i>
+				            <a href="{{ url('/document/' . $document->id) }}">
+				            	<i class="fas fa-link" style="color: #a9a9a9"></i>
+				            </a>
 			            	{{ $document->title }}
 			            </label>
 		          	</div>

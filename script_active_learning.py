@@ -48,7 +48,7 @@ class Sentence(Base):
     _POS_verb  = Column(Integer)
     _POS_intj  = Column(Integer) # interjection: an exclamation or part of an exclamation
 
-    def __init__(self, text, docid):
+    def __init__(self, text, translation, docid):
         self.text  = text
         self.docid = docid
 
@@ -60,7 +60,6 @@ def getCorpusData():
 
     corpus = session.query(Sentence)\
         .filter(Sentence.translation != None)\
-        .filter(Sentence._words != None)\
         .all()
     POS_acc = {
         'adj' : 0,

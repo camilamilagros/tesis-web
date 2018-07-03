@@ -3,16 +3,19 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+
 use App\Models\Sentence;
 
-class SentenceController extends Controller
+class TranslationController extends Controller
 {
-    function createTranslation(Sentence $sentence)
+    function create()
     {
+        $sentence = Sentence::whereNull('translation')
+            ->orderBy('score', 'desc')->first();
         $document = $sentence->document;
 
-        $data = [
-            'document' => $document,
+    	$data = [
+    		'document' => $document,
             'before' => $document->sentences()
                 ->where('id','<', $sentence->id)
                 ->orderBy('id', 'desc')
@@ -24,17 +27,17 @@ class SentenceController extends Controller
                 ->where('id','>', $sentence->id)
                 ->take(4)
                 ->get()
-        ];
+    	];
 
-        return view('sentence.create_translation', $data);
+        return view('translation.create', $data);
     }
 
-    function storeTranslation(Request $request)
+    function store(Request $request)
     {
-        $sentence = Sentence::find($request->id);
-        $sentence->update(['translation' => $request->translation]);
+        Sentence::find($request->id)
+            ->update(['translation' => $request->translation]);
 
-        return redirect('/document/' . $sentence->docid)
+        return redirect('/translation')
             ->with('success', 'Se guarda la traduccion con exito!! c:');
     }
 }
